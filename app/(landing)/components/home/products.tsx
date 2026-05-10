@@ -1,3 +1,6 @@
+"use client"; // WAJIB ADA untuk memperbaiki error image_4aadad.png
+
+import priceFormatter from "@/app/utils/price-formatter";
 import Image from "next/image";
 import Link from "next/link";
 import { FiPlus } from "react-icons/fi";
@@ -56,22 +59,28 @@ const productList = [
 const ProductsSection = () => {
   return (
     <section id="products-section" className="container mx-auto mt-32 mb-20 px-4">
-      {/* Judul Section */}
-      <h2 className="font-bold italic text-4xl text-center mb-11 uppercase tracking-tight">
+      <h2 className="font-bold italic text-4xl text-center mb-11 uppercase tracking-tight text-dark">
         <span className="text-primary">Our </span> Products
       </h2>
 
-      {/* Grid Produk */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {productList.map((product, index) => (
-          <div 
-            key={index} 
-            className="group relative bg-white rounded-xl transition-all duration-300 hover:shadow-2xl p-4 border border-transparent hover:border-gray-100"
+          /* Hapus Link utama, ganti jadi div agar kita bisa menaruh tombol & link secara independen */
+          <div
+            key={index}
+            className="group relative bg-white rounded-xl transition-all duration-300 hover:shadow-2xl p-4 border border-transparent hover:border-gray-100 flex flex-col"
           >
             {/* Box Image */}
             <div className="relative bg-[#F5EFEF] aspect-square w-full flex justify-center items-center overflow-hidden rounded-lg mb-4">
-              {/* Tombol Plus (+) */}
-              <button className="absolute top-0 right-0 bg-primary text-white p-2 z-20 hover:bg-orange-600 transition-colors shadow-md">
+              
+              {/* Tombol Plus (+) - Kita beri z-index tinggi agar bisa diklik di atas link overlay */}
+              <button 
+                className="absolute top-0 right-0 bg-primary text-white p-2 z-30 hover:bg-orange-600 transition-colors shadow-md"
+                onClick={(e) => {
+                  e.preventDefault(); // Mencegah navigasi Link saat tombol diklik
+                  alert("Added to cart!");
+                }}
+              >
                 <FiPlus size={24} />
               </button>
 
@@ -90,19 +99,19 @@ const ProductsSection = () => {
             </h3>
 
             {/* Info Kategori & Harga */}
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex justify-between items-center mt-auto pt-2">
               <span className="text-gray-400 text-sm font-medium">{product.category}</span>
               <span className="font-bold text-primary">
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                  minimumFractionDigits: 0,
-                }).format(product.price)}
+                {priceFormatter(product.price)}
               </span>
             </div>
-            
-            {/* Link Overlay */}
-            <Link href="#" className="absolute inset-0 z-10" aria-label={product.name} />
+
+            {/* SATU-SATUNYA LINK OVERLAY: menutupi seluruh card kecuali tombol plus */}
+            <Link 
+              href={`/product/${product.name}`} 
+              className="absolute inset-0 z-20" 
+              aria-label={product.name} 
+            />
           </div>
         ))}
       </div>

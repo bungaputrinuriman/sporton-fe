@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "./landing/components/layouts/header"; 
+import Header from "./(landing)/components/layouts/header"; 
 // 1. Import komponen Footer di sini
-import Footer from "./landing/components/layouts/footer"; 
+import Footer from "./(landing)/components/layouts/footer"; 
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} antialiased min-h-full flex flex-col`}>
         <Header />
         {/* main diberi flex-grow supaya footer tetap di bawah jika konten sedikit */}
-        <main className="relative flex-grow">
+        <main className="relative grow">
           {children}
         </main>
         {/* 2. Panggil komponen Footer dengan huruf kapital */}
